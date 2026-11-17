@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="es" data-bs-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Animalia — Red Comunitaria de Rescate & Sanidad</title>
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <!-- Estilos Propios -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Navbar Translúcida -->
+  <nav class="navbar navbar-expand-lg navbar-dark sticky-top px-3">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+        <i class="bi bi-shield-fill-plus text-success fs-3"></i>
+        <span class="fw-bold fs-4 tracking-wide text-success">ANIMALIA</span>
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto gap-lg-2">
+          <li class="nav-item"><a class="nav-link text-light" href="#mapa-section"><i class="bi bi-geo-alt-fill text-success me-1"></i> Alertas GPS</a></li>
+          <li class="nav-item"><a class="nav-link text-light" href="#chatbot-section"><i class="bi bi-cpu-fill text-info me-1"></i> Triage IA</a></li>
+          <li class="nav-item"><a class="nav-link text-light" href="#adopciones-section"><i class="bi bi-heart-fill text-danger me-1"></i> Adopciones</a></li>
+          <li class="nav-item"><a class="nav-link text-light" href="#zoonosis-section"><i class="bi bi-truck text-warning me-1"></i> Zoonosis</a></li>
+          <li class="nav-item"><a class="nav-link text-light" href="#foro-section"><i class="bi bi-chat-dots-fill text-primary me-1"></i> Foro / Duda Vete</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Banner Hero -->
+  <header class="text-center py-5 mb-4 border-bottom border-secondary">
+    <div class="container py-3">
+      <span class="badge bg-success bg-opacity-20 text-success border border-success px-3 py-2 rounded-pill fw-bold mb-3">PLATAFORMA INTEGRAL SANITARIA</span>
+      <h1 class="display-4 fw-black mb-3">Rescate Urbano & Sanidad Animal</h1>
+      <p class="lead text-muted col-lg-8 mx-auto mb-4">Reportá emergencias geolocalizadas, atendé con IA, encontrá mascotas y enterate de las paradas de tráilers de castración.</p>
+      <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <button class="btn btn-danger btn-lg rounded-pill fw-bold px-4" data-bs-toggle="modal" data-bs-target="#modalAlerta">
+          <i class="bi bi-broadcast me-2"></i> Reportar Emergencia GPS
+        </button>
+        <button class="btn btn-success btn-lg rounded-pill fw-bold px-4" data-bs-toggle="modal" data-bs-target="#modalPublicarAdopcion">
+          <i class="bi bi-plus-circle-fill me-2"></i> Publicar Mascota
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="container mb-5">
+    
+    <!-- 1. MAPA DE ALERTAS GPS -->
+    <section id="mapa-section" class="mb-5">
+      <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+        <div>
+          <h2 class="fw-bold text-success mb-1"><i class="bi bi-map-fill me-2"></i>Mapa de Emergencias en Vivo</h2>
+          <p class="text-muted mb-0">Alertas reportadas con coordenadas GPS automáticas por los vecinos.</p>
+        </div>
+        <button class="btn btn-outline-success rounded-pill px-3" onclick="recargarMapa()">
+          <i class="bi bi-arrow-clockwise me-1"></i> Actualizar Mapa
+        </button>
+      </div>
+      <div id="map"></div>
+    </section>
+
+    <!-- 2. CHATBOT TRIAGE IA -->
+    <section id="chatbot-section" class="mb-5">
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="card-header bg-dark p-4 border-bottom border-secondary">
+          <div class="d-flex align-items-center gap-3">
+            <i class="bi bi-robot fs-1 text-info"></i>
+            <div>
+              <h3 class="fw-bold mb-0">Asistente Virtual de Triage & Primeros Auxilios</h3>
+              <p class="mb-0 text-muted">Instrucciones inmediatas con IA sobre qué hacer y qué NO hacer ante urgencias.</p>
+            </div>
+          </div>
+        </div>
+        <div class="card-body p-4">
+          <div class="row g-3">
+            <div class="col-md-8">
+              <label class="form-label fw-bold">Seleccioná el caso del animal:</label>
+              <select id="selectTipoCuadro" class="form-select form-select-lg">
+                <option value="" selected disabled>-- Seleccioná un tipo de emergencia --</option>
+                <option value="atropello">Atropello / Traumatismo Grave / Sangrado</option>
+                <option value="intoxicacion">Sospecha de Intoxicación o Envenenamiento</option>
+                <option value="ave_caida">Pichón o Ave Caída que no vuela</option>
+              </select>
+            </div>
+            <div class="col-md-4 d-flex align-items-end">
+              <button class="btn btn-info btn-lg w-100 text-white fw-bold" onclick="consultarTriage()">
+                <i class="bi bi-cpu-fill me-2"></i> Consultar Guía IA
+              </button>
+            </div>
+          </div>
+
+          <div id="contenedorRespuestaChatbot" class="d-none mt-4 p-4 rounded-3 border border-secondary chat-response">
+            <h4 id="chatbotTitulo" class="fw-bold text-success mb-3"></h4>
+            <h6 class="fw-bold text-light"><i class="bi bi-check-circle-fill text-success me-2"></i> Pasos de Contención Inmediata:</h6>
+            <ul id="chatbotPasos" class="mb-4 text-muted"></ul>
+
+            <div class="p-3 bg-danger bg-opacity-10 border border-danger rounded-3">
+              <h6 class="fw-bold text-danger mb-2"><i class="bi bi-x-octagon-fill me-2"></i> ¡LO QUE NUNCA DEBÉS HACER!</h6>
+              <ul id="chatbotProhibido" class="text-danger mb-0"></ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. CATÁLOGO DE ADOPCIONES CON FILTROS FUNCIONALES -->
+    <section id="adopciones-section" class="mb-5">
+      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <div>
+          <h2 class="fw-bold text-light mb-1"><i class="bi bi-house-heart-fill text-danger me-2"></i>Catálogo de Adopción Responsable</h2>
+          <p class="text-muted mb-0">Encontrá tu mascota ideal o publicá una para buscarle hogar.</p>
+        </div>
+        <button class="btn btn-success rounded-pill px-4 fw-bold shadow" data-bs-toggle="modal" data-bs-target="#modalPublicarAdopcion">
+          <i class="bi bi-plus-circle-fill me-2"></i> Publicar Mascota
+        </button>
+      </div>
+
+      <!-- Filtros por tamaño -->
+      <div class="card p-3 mb-4">
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+          <span class="fw-bold text-muted"><i class="bi bi-funnel-fill me-1"></i> Filtrar por Tamaño:</span>
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-success active" onclick="filtrarTamanio('todos', this)">Todos</button>
+            <button type="button" class="btn btn-outline-success" onclick="filtrarTamanio('Chico', this)">Chico</button>
+            <button type="button" class="btn btn-outline-success" onclick="filtrarTamanio('Mediano', this)">Mediano</button>
+            <button type="button" class="btn btn-outline-success" onclick="filtrarTamanio('Grande', this)">Grande</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tarjetas -->
+      <div class="row g-4" id="contenedorTarjetasAdopcion">
+        <div class="col-md-4 tarjeta-adopcion" data-tamanio="Chico">
+          <div class="card h-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Rocky">
+            <div class="card-body">
+              <span class="badge bg-success mb-2">Perro · Chico</span>
+              <h5 class="card-title fw-bold text-light">Rocky</h5>
+              <p class="card-text text-muted small">Rescatado con libreta sanitaria. Súper sociable e ideal para espacios chicos.</p>
+            </div>
+            <div class="card-footer bg-transparent border-top border-secondary p-3">
+              <button class="btn btn-outline-info w-100 rounded-pill"><i class="bi bi-qr-code-scan me-1"></i> Ver Ficha Sanitaria (QR)</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 tarjeta-adopcion" data-tamanio="Mediano">
+          <div class="card h-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=600&q=80" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Luna">
+            <div class="card-body">
+              <span class="badge bg-info text-dark mb-2">Perro · Mediano</span>
+              <h5 class="card-title fw-bold text-light">Luna</h5>
+              <p class="card-text text-muted small">Cachorrona de 8 meses, castrada y desparasitada. Súper cariñosa.</p>
+            </div>
+            <div class="card-footer bg-transparent border-top border-secondary p-3">
+              <button class="btn btn-outline-info w-100 rounded-pill"><i class="bi bi-qr-code-scan me-1"></i> Ver Ficha Sanitaria (QR)</button>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4 tarjeta-adopcion" data-tamanio="Grande">
+          <div class="card h-100 overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=600&q=80" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Thor">
+            <div class="card-body">
+              <span class="badge bg-warning text-dark mb-2">Perro · Grande</span>
+              <h5 class="card-title fw-bold text-light">Thor</h5>
+              <p class="card-text text-muted small">Protector y juguetón. Requiere casa con patio amplio para ejercitarse.</p>
+            </div>
+            <div class="card-footer bg-transparent border-top border-secondary p-3">
+              <button class="btn btn-outline-info w-100 rounded-pill"><i class="bi bi-qr-code-scan me-1"></i> Ver Ficha Sanitaria (QR)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. TRÁILERS DE ZOONOSIS Y CASTRACIÓN MUNICIPAL -->
+    <section id="zoonosis-section" class="mb-5">
+      <div class="card border-0 shadow-lg rounded-4 p-4 border border-warning">
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <i class="bi bi-truck text-warning fs-1"></i>
+          <div>
+            <h3 class="fw-bold mb-0 text-warning">Tráilers Móviles de Zoonosis & Castración Gratuita</h3>
+            <p class="text-muted mb-0">Consultá paradas semanales, turnos por orden de llegada y requisitos de ayuno.</p>
+          </div>
+        </div>
+        <div class="row g-3">
+          <div class="col-md-6">
+            <div class="p-3 rounded-3 bg-dark border border-secondary h-100">
+              <h5 class="fw-bold text-success"><i class="bi bi-geo-alt me-2"></i>Próximos Operativos en Barriadas</h5>
+              <ul class="list-unstyled text-muted mb-0 small">
+                <li class="mb-2">📍 <strong>Plaza Urquiza:</strong> Lunes a Miércoles (08:00 hs) — 20 turnos diarios.</li>
+                <li class="mb-2">📍 <strong>Barrio Manantial Sur:</strong> Jueves y Viernes (08:30 hs) — Vacunación antirrábica gratis.</li>
+              </ul>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="p-3 rounded-3 bg-dark border border-secondary h-100">
+              <h5 class="fw-bold text-danger"><i class="bi bi-exclamation-circle me-2"></i>Requisitos Obligatorios de Asistencia</h5>
+              <ul class="text-muted mb-0 small">
+                <li>Ayuno previo de 8 horas de alimentos sólidos y líquidos.</li>
+                <li>Llevar manta para el posoperatorio y correa/bozal o transportadora.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. FORO DE COMUNIDAD / CONSULTAS DE VETERINARIAS DE TURNO -->
+    <section id="foro-section" class="mb-5">
+      <div class="card p-4">
+        <h3 class="fw-bold text-primary mb-2"><i class="bi bi-chat-left-dots-fill me-2"></i>Foro Comunidad: Preguntas & Veterinarias de Turno</h3>
+        <p class="text-muted mb-3">¿Tenés dudas sobre alguna clínica de guardia o necesitás recomendación? Consultalo acá.</p>
+        
+        <div class="chat-mensajes p-3 mb-3" id="boxMensajes">
+          <div class="mb-2 p-2 rounded bg-dark border border-secondary">
+            <strong class="text-info">Carlos R.:</strong> <span class="text-light">¿Alguien sabe qué veterinaria de turno está abierta cerca del centro?</span>
+          </div>
+          <div class="mb-2 p-2 rounded bg-dark border border-secondary">
+            <strong class="text-success">Dra. Lucía (Vete):</strong> <span class="text-light">Hola Carlos, Clínica San Martín está de guardia 24hs hoy sobre Av. Alem.</span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <input type="text" id="inputPregunta" class="form-control" placeholder="Escribí tu consulta o recomendación...">
+          <button class="btn btn-primary fw-bold" onclick="publicarMensajeComunidad()"><i class="bi bi-send me-1"></i> Publicar</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- MODAL 1: REPORTAR EMERGENCIA GPS -->
+  <div class="modal fade" id="modalAlerta" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-danger text-white border-0">
+          <h5 class="modal-title fw-bold"><i class="bi bi-geo-fill me-2"></i> Reportar Emergencia GPS</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="formAlerta">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Tipo de Fauna</label>
+              <select class="form-select" id="tipoFauna" required>
+                <option value="Perro">Perro</option>
+                <option value="Gato">Gato</option>
+                <option value="Ave">Ave</option>
+                <option value="Silvestre/Exótica">Silvestre / Exótica</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Descripción de la Situación</label>
+              <textarea class="form-control" id="descripcionAlerta" rows="3" placeholder="Estado del animal o referencia..." required></textarea>
+            </div>
+            <div class="mb-3">
+              <button type="button" class="btn btn-outline-danger w-100" onclick="obtenerUbicacionGPS()">
+                <i class="bi bi-crosshair me-1"></i> Capturar Coordenadas GPS
+              </button>
+              <small id="gpsStatus" class="text-muted d-block mt-2 text-center"></small>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-dark rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger rounded-pill px-4" onclick="enviarAlerta()">Publicar Alerta</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: PUBLICAR MASCOTA PARA ADOPCIÓN -->
+  <div class="modal fade" id="modalPublicarAdopcion" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header bg-success text-white border-0">
+          <h5 class="modal-title fw-bold"><i class="bi bi-heart-fill me-2"></i> Publicar Mascota en Adopción</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="formAdopcion">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Nombre</label>
+                <input type="text" class="form-control" id="nombreMascota" placeholder="Ej: Firulais" required>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Especie</label>
+                <select class="form-select" id="especieMascota" required>
+                  <option value="Perro">Perro</option>
+                  <option value="Gato">Gato</option>
+                  <option value="Otro">Otro</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">Tamaño</label>
+                <select class="form-select" id="tamanioMascota" required>
+                  <option value="Chico">Chico</option>
+                  <option value="Mediano">Mediano</option>
+                  <option value="Grande">Grande</option>
+                </select>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">Edad</label>
+                <input type="text" class="form-control" id="edadMascota" placeholder="Ej: 1 año" required>
+              </div>
+              <div class="col-md-4">
+                <label class="form-label fw-bold">Sexo</label>
+                <select class="form-select" id="sexoMascota" required>
+                  <option value="Macho">Macho</option>
+                  <option value="Hembra">Hembra</option>
+                </select>
+              </div>
+              <div class="col-md-12">
+                <label class="form-label fw-bold">Fotos de la Mascota (Máximo 3)</label>
+                <input type="file" class="form-control" id="fotosMascotaFiles" accept="image/*" multiple onchange="previsualizarFotos(event)">
+                <small class="text-muted">Podés seleccionar 1, 2 o hasta 3 fotos juntas de tu galería.</small>
+                <div id="contenedorPrevisualizacion" class="mt-3 d-flex gap-2 justify-content-center flex-wrap d-none"></div>
+              </div>
+              <div class="col-md-12">
+                <label class="form-label fw-bold">Descripción</label>
+                <textarea class="form-control" id="descripcionMascota" rows="2" placeholder="Detalles de vacunas o temperamento..." required></textarea>
+              </div>
+              <div class="col-md-6">
+                <label class="form-label fw-bold">Contacto / WhatsApp</label>
+                <input type="tel" class="form-control" id="contactoMascota" placeholder="381XXXXXXX" required>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-dark rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-success rounded-pill px-4" onclick="guardarMascotaAdopcion()">Publicar para Adopción</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <script>
+  // Inicializar Mapa centrado en Tucumán
+  let map = L.map('map').setView([-26.8083, -65.2175], 13);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap'
+  }).addTo(map);
+
+  let miLatitud = null;
+  let miLongitud = null;
+
+  // Reajustar mapa por si no renderiza bien el tamaño
+  function recargarMapa() {
+    setTimeout(() => { map.invalidateSize(); }, 300);
+  }
+
+  // 1. Capturar Coordenadas GPS del Navegador
+  function obtenerUbicacionGPS() {
+    const status = document.getElementById('gpsStatus');
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition((pos) => {
+        miLatitud = pos.coords.latitude;
+        miLongitud = pos.coords.longitude;
+        status.innerText = `GPS OK: (${miLatitud.toFixed(4)}, ${miLongitud.toFixed(4)})`;
+        status.className = "text-success d-block mt-2 text-center fw-bold";
+      }, () => {
+        status.innerText = "Error al obtener ubicación. Verificá los permisos.";
+        status.className = "text-danger d-block mt-2 text-center";
+      });
+    }
+  }
+
+  // 2. PUBLICAR ALERTA GPS (Función agregada y conectada al backend)
+  async function enviarAlerta() {
+    const tipo_fauna = document.getElementById('tipoFauna').value;
+    const descripcion = document.getElementById('descripcionAlerta').value;
+
+    if (!descripcion.trim()) {
+      return alert('Por favor ingresá la descripción de la situación.');
+    }
+
+    if (!miLatitud || !miLongitud) {
+      return alert('Primero hacé clic en "Capturar Coordenadas GPS" para ubicar la emergencia en el mapa.');
+    }
+
+    try {
+      const res = await fetch('/api/alertas', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          tipo_fauna,
+          descripcion,
+          latitud: miLatitud,
+          longitud: miLongitud,
+          estado: 'Reportada'
+        })
+      });
+
+      const json = await res.json();
+
+      if (json.success) {
+        // Dibujar pin en el mapa de inmediato
+        L.marker([miLatitud, miLongitud])
+          .addTo(map)
+          .bindPopup(`<b>${tipo_fauna}</b><br>${descripcion}<br><span class="badge bg-danger">Reportada</span>`)
+          .openPopup();
+
+        // Cerrar modal y limpiar formulario
+        const modalElement = document.getElementById('modalAlerta');
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        modal.hide();
+
+        document.getElementById('formAlerta').reset();
+        document.getElementById('gpsStatus').innerText = '';
+        miLatitud = null;
+        miLongitud = null;
+
+        alert('¡Alerta publicada con éxito en el mapa comunitario!');
+      } else {
+        // Si la base de datos no está levantada, dibuja el pin localmente como prueba
+        L.marker([miLatitud, miLongitud])
+          .addTo(map)
+          .bindPopup(`<b>${tipo_fauna}</b><br>${descripcion}<br><span class="badge bg-danger">Reportada</span>`)
+          .openPopup();
+
+        const modalElement = document.getElementById('modalAlerta');
+        const modal = bootstrap.Modal.getInstance(modalElement);
+        modal.hide();
+        alert('Alerta agregada al mapa en vivo.');
+      }
+    } catch (err) {
+      // Fallback si la API offline
+      L.marker([miLatitud, miLongitud])
+        .addTo(map)
+        .bindPopup(`<b>${tipo_fauna}</b><br>${descripcion}<br><span class="badge bg-danger">Reportada</span>`)
+        .openPopup();
+
+      const modalElement = document.getElementById('modalAlerta');
+      const modal = bootstrap.Modal.getInstance(modalElement);
+      modal.hide();
+      alert('Alerta visualizada en el mapa localmente.');
+    }
+  }
+
+  // 3. Consultar Chatbot Triage IA
+  async function consultarTriage() {
+    const tipo = document.getElementById('selectTipoCuadro').value;
+    if (!tipo) return alert('Por favor seleccioná una opción');
+
+    const res = await fetch('/api/chatbot/consultar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ tipo_cuadro: tipo })
+    });
+    const json = await res.json();
+
+    if (json.success && json.data) {
+      document.getElementById('chatbotTitulo').innerText = json.data.titulo;
+      document.getElementById('chatbotPasos').innerHTML = json.data.pasos.map(p => `<li>${p}</li>`).join('');
+      document.getElementById('chatbotProhibido').innerHTML = json.data.prohibido.map(p => `<li>${p}</li>`).join('');
+      document.getElementById('contenedorRespuestaChatbot').classList.remove('d-none');
+    }
+  }
+
+  // 4. Filtrar adopciones por tamaño
+  function filtrarTamanio(tamanio, btn) {
+    document.querySelectorAll('#adopciones-section .btn-group .btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    const tarjetas = document.querySelectorAll('.tarjeta-adopcion');
+    tarjetas.forEach(t => {
+      if (tamanio === 'todos' || t.dataset.tamanio === tamanio) {
+        t.style.display = 'block';
+      } else {
+        t.style.display = 'none';
+      }
+    });
+  }
+
+  // 5. Publicar Mascota en Adopción
+  let listaFotosBase64 = [];
+  let procesandoFotos = false;
+  let versionFotos = 0;
+
+  function cargarImagen(file) {
+    return new Promise((resolve, reject) => {
+      const objectUrl = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => {
+        URL.revokeObjectURL(objectUrl);
+        resolve(img);
+      };
+      img.onerror = () => {
+        URL.revokeObjectURL(objectUrl);
+        reject(new Error(`No se pudo leer la imagen "${file.name}".`));
+      };
+      img.src = objectUrl;
+    });
+  }
+
+  function crearBlobJPEG(canvas, quality) {
+    return new Promise((resolve, reject) => {
+      canvas.toBlob(blob => {
+        if (blob) {
+          resolve(blob);
+        } else {
+          reject(new Error('No se pudo comprimir una de las imágenes.'));
+        }
+      }, 'image/jpeg', quality);
+    });
+  }
+
+  function blobComoBase64(blob) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = () => reject(new Error('No se pudo preparar una imagen para enviarla.'));
+      reader.readAsDataURL(blob);
+    });
+  }
+
+  async function comprimirFoto(file) {
+    const img = await cargarImagen(file);
+    const maxBytes = 200 * 1024;
+    const maxDimension = 800;
+    const initialScale = Math.min(
+      maxDimension / img.naturalWidth,
+      maxDimension / img.naturalHeight,
+      1
+    );
+    const baseWidth = img.naturalWidth * initialScale;
+    const baseHeight = img.naturalHeight * initialScale;
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) {
+      throw new Error('El navegador no pudo preparar el compresor de imágenes.');
+    }
+
+    for (let scale = 1; scale >= 0.2; scale *= 0.8) {
+      const width = Math.max(1, Math.round(baseWidth * scale));
+      const height = Math.max(1, Math.round(baseHeight * scale));
+      canvas.width = width;
+      canvas.height = height;
+      ctx.fillStyle = '#fff';
+      ctx.fillRect(0, 0, width, height);
+      ctx.drawImage(img, 0, 0, width, height);
+
+      for (const quality of [0.7, 0.6, 0.5, 0.4]) {
+        const blob = await crearBlobJPEG(canvas, quality);
+        if (blob.size <= maxBytes) {
+          return blobComoBase64(blob);
+        }
+      }
+
+      if (width <= 1 || height <= 1) {
+        break;
+      }
+    }
+
+    throw new Error(`La imagen "${file.name}" no se pudo reducir a menos de 200 KB.`);
+  }
+
+  // Previsualizar y comprimir hasta 3 fotos
+  async function previsualizarFotos(event) {
+    const input = event.target;
+    const contenedor = document.getElementById('contenedorPrevisualizacion');
+    const files = Array.from(input.files);
+    const versionActual = ++versionFotos;
+    listaFotosBase64 = [];
+    contenedor.innerHTML = '';
+    contenedor.classList.add('d-none');
+
+    if (files.length > 3) {
+      input.value = '';
+      procesandoFotos = false;
+      return alert('Podés seleccionar un máximo de 3 fotos.');
+    }
+
+    if (files.length === 0) {
+      procesandoFotos = false;
+      return;
+    }
+
+    const archivoNoImagen = files.find(file => !file.type.startsWith('image/'));
+    if (archivoNoImagen) {
+      input.value = '';
+      procesandoFotos = false;
+      return alert(`El archivo "${archivoNoImagen.name}" no es una imagen válida.`);
+    }
+
+    procesandoFotos = true;
+    contenedor.classList.remove('d-none');
+    contenedor.textContent = 'Comprimiendo imágenes...';
+
+    try {
+      const fotosComprimidas = [];
+      for (const file of files) {
+        const foto = await comprimirFoto(file);
+        if (versionActual !== versionFotos) {
+          return;
+        }
+
+        fotosComprimidas.push(foto);
+        const imgElem = document.createElement('img');
+        imgElem.src = foto;
+        imgElem.alt = `Previsualización de ${file.name}`;
+        imgElem.className = 'rounded border border-secondary shadow-sm';
+        imgElem.style.cssText = 'height: 120px; width: 120px; object-fit: cover;';
+        if (fotosComprimidas.length === 1) {
+          contenedor.textContent = '';
+        }
+        contenedor.appendChild(imgElem);
+      }
+
+      listaFotosBase64 = fotosComprimidas;
+    } catch (error) {
+      if (versionActual === versionFotos) {
+        listaFotosBase64 = [];
+        input.value = '';
+        contenedor.innerHTML = '';
+        contenedor.classList.add('d-none');
+        alert(error.message);
+      }
+    } finally {
+      if (versionActual === versionFotos) {
+        procesandoFotos = false;
+      }
+    }
+  }
+
+  // Enviar formulario a la API
+  async function guardarMascotaAdopcion() {
+    const nombre = document.getElementById('nombreMascota').value;
+    const especie = document.getElementById('especieMascota').value;
+    const tamanio = document.getElementById('tamanioMascota').value;
+    const edad = document.getElementById('edadMascota').value;
+    const sexo = document.getElementById('sexoMascota').value;
+    const descripcion = document.getElementById('descripcionMascota').value;
+    const contacto = document.getElementById('contactoMascota').value;
+
+    if (!nombre || !descripcion || !contacto) {
+      return alert('Por favor completa todos los campos requeridos (Nombre, Descripción y Contacto).');
+    }
+
+    if (procesandoFotos) {
+      return alert('Esperá a que termine la compresión de las fotos antes de publicar.');
+    }
+
+    const foto_url = listaFotosBase64.length > 0
+      ? JSON.stringify(listaFotosBase64)
+      : "https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80";
+
+    try {
+      const res = await fetch('/api/adopciones', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre,
+          especie,
+          tamanio,
+          edad,
+          sexo,
+          foto_url,
+          descripcion,
+          contacto
+        })
+      });
+
+      const responseText = await res.text();
+      let json = null;
+      try {
+        json = responseText ? JSON.parse(responseText) : null;
+      } catch (error) {
+        console.error('La API devolvió una respuesta que no es JSON:', {
+          status: res.status,
+          body: responseText
+        });
+      }
+
+      if (res.ok && json && json.success) {
+        alert('¡Mascota publicada con éxito en el catálogo de Animalia!');
+        location.reload();
+      } else {
+        const detalle = json && (json.message || json.error);
+        const mensaje = res.status === 404
+          ? 'La ruta POST /api/adopciones no está disponible en el servidor.'
+          : res.status === 413
+            ? 'La solicitud supera el límite de tamaño configurado en el servidor.'
+            : detalle || `El servidor respondió con HTTP ${res.status}.`;
+        console.error('Error al publicar mascota:', {
+          status: res.status,
+          body: responseText
+        });
+        alert('Error en el servidor al publicar: ' + mensaje);
+      }
+    } catch (err) {
+      console.error(err);
+      alert('No se pudo conectar con el servidor. Verificá que el backend esté ejecutándose y volvé a intentar.');
+    }
+  }
+
+  // 6. Publicar mensaje en el foro
+  function publicarMensajeComunidad() {
+    const input = document.getElementById('inputPregunta');
+    if (!input.value.trim()) return;
+
+    const box = document.getElementById('boxMensajes');
+    const nuevo = document.createElement('div');
+    nuevo.className = "mb-2 p-2 rounded bg-dark border border-secondary";
+    nuevo.innerHTML = `<strong class="text-warning">Vecino:</strong> <span class="text-light">${input.value}</span>`;
+    box.appendChild(nuevo);
+    input.value = '';
+    box.scrollTop = box.scrollHeight;
+  }
+</script>

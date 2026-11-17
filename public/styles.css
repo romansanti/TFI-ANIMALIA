@@ -1,0 +1,77 @@
+:root {
+  --bg-dark: #0f172a;
+  --bg-card: #1e293b;
+  --bg-card-hover: #334155;
+  --primary-emerald: #10b981;
+  --accent-cyan: #06b6d4;
+  --accent-danger: #ef4444;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border-color: rgba(255, 255, 255, 0.1);
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+}
+
+/* Navbar */
+.navbar {
+  background: rgba(15, 23, 42, 0.95) !important;
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border-color);
+}
+
+/* Cards */
+.card {
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  border-radius: 16px;
+  transition: all 0.25s ease;
+}
+
+.card:hover {
+  border-color: var(--primary-emerald);
+}
+
+/* Mapa Limpio */
+#map {
+  height: 420px;
+  width: 100%;
+  border-radius: 16px;
+  border: 1px solid var(--border-color);
+  z-index: 1;
+}
+
+/* Modales y Formularios */
+.modal-content {
+  background-color: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-color);
+  border-radius: 18px;
+}
+
+.form-control, .form-select {
+  background-color: #0f172a;
+  border: 1px solid var(--border-color);
+  color: var(--text-main);
+  border-radius: 8px;
+}
+
+.form-control:focus, .form-select:focus {
+  background-color: #0f172a;
+  color: var(--text-main);
+  border-color: var(--primary-emerald);
+  box-shadow: 0 0 0 0.25rem rgba(16, 185, 129, 0.25);
+}
+
+/* Chat de Comunidad */
+.chat-mensajes {
+  max-height: 320px;
+  overflow-y: auto;
+  background-color: #0f172a;
+  border-radius: 12px;
+  border: 1px solid var(--border-color);
+}
