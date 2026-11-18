@@ -15,10 +15,10 @@
 </head>
 <body>
 
-  <!-- Navbar Translúcida -->
+<!-- Navbar Translúcida -->
   <nav class="navbar navbar-expand-lg navbar-dark sticky-top px-3">
     <div class="container">
-      <a class="navbar-brand d-flex align-items-center gap-2" href="#">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="#" onclick="mostrarVista('inicio'); return false;">
         <i class="bi bi-shield-fill-plus text-success fs-3"></i>
         <span class="fw-bold fs-4 tracking-wide text-success">ANIMALIA</span>
       </a>
@@ -27,20 +27,20 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto gap-lg-2">
-          <li class="nav-item"><a class="nav-link text-light" href="#mapa-section"><i class="bi bi-geo-alt-fill text-success me-1"></i> Alertas GPS</a></li>
-          <li class="nav-item"><a class="nav-link text-light" href="#chatbot-section"><i class="bi bi-cpu-fill text-info me-1"></i> Triage IA</a></li>
-          <li class="nav-item"><a class="nav-link text-light" href="#adopciones-section"><i class="bi bi-heart-fill text-danger me-1"></i> Adopciones</a></li>
-          <li class="nav-item"><a class="nav-link text-light" href="#zoonosis-section"><i class="bi bi-truck text-warning me-1"></i> Zoonosis</a></li>
-          <li class="nav-item"><a class="nav-link text-light" href="#foro-section"><i class="bi bi-chat-dots-fill text-primary me-1"></i> Foro / Duda Vete</a></li>
+          <li class="nav-item"><a class="nav-link text-light vista-link" data-vista="mapa-section" href="#" onclick="mostrarVista('mapa-section'); return false;"><i class="bi bi-geo-alt-fill text-success me-1"></i> Alertas GPS</a></li>
+          <li class="nav-item"><a class="nav-link text-light vista-link" data-vista="chatbot-section" href="#" onclick="mostrarVista('chatbot-section'); return false;"><i class="bi bi-cpu-fill text-info me-1"></i> Chatbot IA</a></li>
+          <li class="nav-item"><a class="nav-link text-light vista-link" data-vista="adopciones-section" href="#" onclick="mostrarVista('adopciones-section'); return false;"><i class="bi bi-heart-fill text-danger me-1"></i> Adopciones</a></li>
+          <li class="nav-item"><a class="nav-link text-light vista-link" data-vista="zoonosis-section" href="#" onclick="mostrarVista('zoonosis-section'); return false;"><i class="bi bi-truck text-warning me-1"></i> Zoonosis</a></li>
+          <li class="nav-item"><a class="nav-link text-light vista-link" data-vista="foro-section" href="#" onclick="mostrarVista('foro-section'); return false;"><i class="bi bi-chat-dots-fill text-primary me-1"></i> Foro / Duda Vete</a></li>
         </ul>
       </div>
     </div>
   </nav>
 
   <!-- Banner Hero -->
-  <header class="text-center py-5 mb-4 border-bottom border-secondary">
+  <header id="hero-banner" class="text-center py-5 mb-4 border-bottom border-secondary">
     <div class="container py-3">
-      <span class="badge bg-success bg-opacity-20 text-success border border-success px-3 py-2 rounded-pill fw-bold mb-3">PLATAFORMA INTEGRAL SANITARIA</span>
+      <span class="badge bg-success bg-opacity-20 text-white border border-success px-3 py-2 rounded-pill fw-bold mb-3">PLATAFORMA INTEGRAL SANITARIA</span>
       <h1 class="display-4 fw-black mb-3">Rescate Urbano & Sanidad Animal</h1>
       <p class="lead text-muted col-lg-8 mx-auto mb-4">Reportá emergencias geolocalizadas, atendé con IA, encontrá mascotas y enterate de las paradas de tráilers de castración.</p>
       <div class="d-flex justify-content-center gap-3 flex-wrap">
@@ -55,10 +55,10 @@
   </header>
 
   <!-- Main Content -->
-  <main class="container mb-5">
+  <main class="container mt-4 mb-5">
     
     <!-- 1. MAPA DE ALERTAS GPS -->
-    <section id="mapa-section" class="mb-5">
+    <section id="mapa-section" class="mb-5 vista-seccion">
       <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
         <div>
           <h2 class="fw-bold text-success mb-1"><i class="bi bi-map-fill me-2"></i>Mapa de Emergencias en Vivo</h2>
@@ -72,7 +72,7 @@
     </section>
 
     <!-- 2. CHATBOT TRIAGE IA -->
-    <section id="chatbot-section" class="mb-5">
+    <section id="chatbot-section" class="mb-5 vista-seccion d-none">
       <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
         <div class="card-header bg-dark p-4 border-bottom border-secondary">
           <div class="d-flex align-items-center gap-3">
@@ -115,77 +115,245 @@
       </div>
     </section>
 
-    <!-- 3. CATÁLOGO DE ADOPCIONES CON FILTROS FUNCIONALES -->
-    <section id="adopciones-section" class="mb-5">
-      <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
-        <div>
-          <h2 class="fw-bold text-light mb-1"><i class="bi bi-house-heart-fill text-danger me-2"></i>Catálogo de Adopción Responsable</h2>
-          <p class="text-muted mb-0">Encontrá tu mascota ideal o publicá una para buscarle hogar.</p>
+<!-- 3. CATÁLOGO DE ADOPCIONES CON FILTROS FUNCIONALES -->
+    <section id="adopciones-section" class="mb-5 vista-seccion d-none">
+      
+      <!-- VISTA A: GRILLA DE MASCOTAS -->
+      <div id="adopciones-catalogo-vista">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+          <div>
+            <h2 class="fw-bold text-light mb-1"><i class="bi bi-house-heart-fill text-danger me-2"></i>Catálogo de Adopción Responsable</h2>
+            <p class="text-muted mb-0">Hacé clic sobre una mascota para ver su ficha completa y contactar a quien la cuida.</p>
+          </div>
+          <button class="btn btn-success rounded-pill px-4 fw-bold shadow" data-bs-toggle="modal" data-bs-target="#modalPublicarAdopcion">
+            <i class="bi bi-plus-circle-fill me-2"></i> Publicar Mascota
+          </button>
         </div>
-        <button class="btn btn-success rounded-pill px-4 fw-bold shadow" data-bs-toggle="modal" data-bs-target="#modalPublicarAdopcion">
-          <i class="bi bi-plus-circle-fill me-2"></i> Publicar Mascota
-        </button>
+
+        <!-- Filtros por tamaño -->
+        <div class="card p-3 mb-4">
+          <div class="d-flex align-items-center gap-3 flex-wrap">
+            <span class="fw-bold text-muted"><i class="bi bi-funnel-fill me-1"></i> Filtrar por Tamaño:</span>
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-outline-success active" onclick="filtrarTamanio('todos', this)">Todos</button>
+              <button type="button" class="btn btn-outline-success" onclick="filtrarTamanio('Chico', this)">Chico</button>
+              <button type="button" class="btn btn-outline-success" onclick="filtrarTamanio('Mediano', this)">Mediano</button>
+              <button type="button" class="btn btn-outline-success" onclick="filtrarTamanio('Grande', this)">Grande</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjetas -->
+        <div class="row g-4" id="contenedorTarjetasAdopcion">
+          <!-- Rocky -->
+          <div class="col-md-4 tarjeta-adopcion" data-tamanio="Chico" style="cursor: pointer;"
+               onclick="abrirFichaMascota({
+                 nombre: 'Rocky',
+                 especie: 'Perro',
+                 tamanio: 'Chico',
+                 edad: '2 años',
+                 sexo: 'Macho',
+                 ubicacion: 'San Miguel de Tucumán',
+                 foto: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=900&q=80',
+                 descripcion: 'Rescatado con libreta sanitaria. Súper sociable, juguetón e ideal para departamentos o espacios chicos.',
+                 salud: ['Vacunas al día', 'Desparasitado', 'Castrado'],
+                 cuidador: 'Refugio Patitas Tucumán',
+                 rol: 'Refugio',
+                 whatsapp: '5493815551234',
+                 publicado: 'Hace 2 días'
+               })">
+            <div class="card h-100 overflow-hidden border-secondary">
+              <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Rocky">
+              <div class="card-body">
+                <span class="badge bg-success mb-2">Perro · Chico</span>
+                <h5 class="card-title fw-bold text-light">Rocky</h5>
+                <p class="card-text text-muted small">Rescatado con libreta sanitaria. Súper sociable e ideal para espacios chicos.</p>
+              </div>
+              <div class="card-footer bg-transparent border-top border-secondary text-center">
+                <span class="btn btn-outline-info btn-sm rounded-pill w-100"><i class="bi bi-eye me-1"></i> Ver Perfil y Contacto</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Luna -->
+          <div class="col-md-4 tarjeta-adopcion" data-tamanio="Mediano" style="cursor: pointer;"
+               onclick="abrirFichaMascota({
+                 nombre: 'Luna',
+                 especie: 'Perro',
+                 tamanio: 'Mediano',
+                 edad: '8 meses',
+                 sexo: 'Hembra',
+                 ubicacion: 'Yerba Buena, Tucumán',
+                 foto: 'https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=900&q=80',
+                 descripcion: 'Cachorrona de 8 meses, castrada y desparasitada. Súper cariñosa, se lleva genial con chicos y otros perros.',
+                 salud: ['Vacunas al día', 'Desparasitada', 'Castrada'],
+                 cuidador: 'Laura M. (Transito)',
+                 rol: 'Rescatista independiente',
+                 whatsapp: '5493815555678',
+                 publicado: 'Hace 3 días'
+               })">
+            <div class="card h-100 overflow-hidden border-secondary">
+              <img src="https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?auto=format&fit=crop&w=600&q=80" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Luna">
+              <div class="card-body">
+                <span class="badge bg-info text-dark mb-2">Perro · Mediano</span>
+                <h5 class="card-title fw-bold text-light">Luna</h5>
+                <p class="card-text text-muted small">Cachorrona de 8 meses, castrada y desparasitada. Súper cariñosa.</p>
+              </div>
+              <div class="card-footer bg-transparent border-top border-secondary text-center">
+                <span class="btn btn-outline-info btn-sm rounded-pill w-100"><i class="bi bi-eye me-1"></i> Ver Perfil y Contacto</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Thor -->
+          <div class="col-md-4 tarjeta-adopcion" data-tamanio="Grande" style="cursor: pointer;"
+               onclick="abrirFichaMascota({
+                 nombre: 'Thor',
+                 especie: 'Perro',
+                 tamanio: 'Grande',
+                 edad: '3 años',
+                 sexo: 'Macho',
+                 ubicacion: 'Tafí Viejo, Tucumán',
+                 foto: 'https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=900&q=80',
+                 descripcion: 'Protector y juguetón. Requiere casa con patio amplio o salida diaria para ejercitarse.',
+                 salud: ['Vacunas al día', 'Desparasitado', 'Castrado'],
+                 cuidador: 'Hogar San Roque',
+                 rol: 'Refugio',
+                 whatsapp: '5493815559012',
+                 publicado: 'Hace 5 días'
+               })">
+            <div class="card h-100 overflow-hidden border-secondary">
+              <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=600&q=80" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Thor">
+              <div class="card-body">
+                <span class="badge bg-warning text-dark mb-2">Perro · Grande</span>
+                <h5 class="card-title fw-bold text-light">Thor</h5>
+                <p class="card-text text-muted small">Protector y juguetón. Requiere casa con patio amplio para ejercitarse.</p>
+              </div>
+              <div class="card-footer bg-transparent border-top border-secondary text-center">
+                <span class="btn btn-outline-info btn-sm rounded-pill w-100"><i class="bi bi-eye me-1"></i> Ver Perfil y Contacto</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <!-- Filtros por tamaño -->
-      <div class="card p-3 mb-4">
-        <div class="d-flex align-items-center gap-3 flex-wrap">
-          <span class="fw-bold text-muted"><i class="bi bi-funnel-fill me-1"></i> Filtrar por Tamaño:</span>
-          <div class="btn-group" role="group">
-            <button type="button" class="btn btn-outline-success active" onclick="filtrarTamanio('todos', this)">Todos</button>
-            <button type="button" class="btn btn-outline-success" onclick="filtrarTamanio('Chico', this)">Chico</button>
-            <button type="button" class="btn btn-outline-success" onclick="filtrarTamanio('Mediano', this)">Mediano</button>
-            <button type="button" class="btn btn-outline-success" onclick="filtrarTamanio('Grande', this)">Grande</button>
+      <!-- VISTA B: FICHA DETALLADA DE LA MASCOTA -->
+      <div id="adopciones-detalle-vista" class="d-none">
+        <!-- Breadcrumb / Botón Volver -->
+        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb mb-0">
+              <li class="breadcrumb-item"><a href="#" class="text-success text-decoration-none fw-bold" onclick="volverACatalogoAdopcion(); return false;">Adoptar</a></li>
+              <li class="breadcrumb-item text-muted" id="fichaBreadcrumbEspecie">Perros</li>
+              <li class="breadcrumb-item active text-light" id="fichaBreadcrumbNombre">Nombre</li>
+            </ol>
+          </nav>
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" onclick="volverACatalogoAdopcion()">
+            <i class="bi bi-arrow-left me-1"></i> Volver al catálogo
+          </button>
+        </div>
+
+        <div class="row g-4">
+          <!-- COLUMNA IZQUIERDA: Foto, Datos Clave, Historia y Salud -->
+          <div class="col-lg-8">
+            <!-- Foto grande -->
+            <div class="card overflow-hidden border-secondary mb-4">
+              <img id="fichaFoto" src="" alt="Mascota" class="w-100" style="max-height: 460px; object-fit: cover;">
+            </div>
+
+            <!-- Título y ubicación -->
+            <div class="mb-4">
+              <h1 id="fichaNombre" class="display-5 fw-bold text-light mb-1"></h1>
+              <p class="text-muted mb-0"><i class="bi bi-geo-alt-fill text-success me-1"></i> <span id="fichaUbicacion">San Miguel de Tucumán</span></p>
+            </div>
+
+            <!-- 4 Tarjetas de características (Especie, Edad, Tamaño, Sexo) -->
+            <div class="row g-3 mb-4">
+              <div class="col-6 col-md-3">
+                <div class="card p-3 h-100 border-secondary bg-dark">
+                  <small class="text-success fw-bold text-uppercase mb-1"><i class="bi bi-award me-1"></i> Especie</small>
+                  <span id="fichaEspecie" class="fw-bold text-light fs-5">Perro</span>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="card p-3 h-100 border-secondary bg-dark">
+                  <small class="text-success fw-bold text-uppercase mb-1"><i class="bi bi-cake2 me-1"></i> Edad</small>
+                  <span id="fichaEdad" class="fw-bold text-light fs-5">-</span>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="card p-3 h-100 border-secondary bg-dark">
+                  <small class="text-success fw-bold text-uppercase mb-1"><i class="bi bi-rulers me-1"></i> Tamaño</small>
+                  <span id="fichaTamanio" class="fw-bold text-light fs-5">-</span>
+                </div>
+              </div>
+              <div class="col-6 col-md-3">
+                <div class="card p-3 h-100 border-secondary bg-dark">
+                  <small class="text-success fw-bold text-uppercase mb-1"><i class="bi bi-gender-ambiguous me-1"></i> Sexo</small>
+                  <span id="fichaSexo" class="fw-bold text-light fs-5">-</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Historia / Sobre la mascota -->
+            <div class="card p-4 border-secondary bg-dark mb-4">
+              <h4 class="fw-bold text-light mb-2">Sobre <span id="fichaNombreSobre"></span></h4>
+              <p id="fichaDescripcion" class="text-muted mb-0"></p>
+            </div>
+
+            <!-- Estado de Salud -->
+            <div class="card p-4 border-secondary bg-dark">
+              <h4 class="fw-bold text-light mb-3">Salud</h4>
+              <div id="fichaSaludBadges" class="d-flex flex-wrap gap-2"></div>
+            </div>
+          </div>
+
+          <!-- COLUMNA DERECHA: Tarjeta de Contacto + WhatsApp + Responsabilidad -->
+          <div class="col-lg-4">
+            <div class="card border-secondary overflow-hidden mb-3 shadow">
+              <div class="bg-success p-4 text-white">
+                <small class="text-uppercase fw-bold opacity-75 d-block mb-1">Hablá con quien lo cuida</small>
+                <h4 id="fichaCuidadorHeader" class="fw-bold mb-0">Refugio</h4>
+              </div>
+              <div class="card-body p-4 bg-dark">
+                <p class="text-muted small mb-3">Escribile directo por WhatsApp para coordinar una visita y hacer todas las preguntas que necesites.</p>
+                
+                <a id="fichaBtnWhatsapp" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-success btn-lg w-100 fw-bold rounded-pill mb-2">
+                  <i class="bi bi-whatsapp me-2"></i> Consultar por WhatsApp
+                </a>
+                <p class="text-center text-muted small mb-4">Adoptar no requiere crear una cuenta</p>
+
+                <hr class="border-secondary">
+
+                <div class="d-flex align-items-center gap-3 mb-3">
+                  <div id="fichaCuidadorIniciales" class="rounded-circle bg-success bg-opacity-25 text-success fw-bold d-flex align-items-center justify-content-center" style="width: 45px; height: 45px;">
+                    AV
+                  </div>
+                  <div>
+                    <strong id="fichaCuidadorNombre" class="text-light d-block">Cuidador</strong>
+                    <small id="fichaCuidadorRol" class="text-muted">Rescatista</small>
+                  </div>
+                </div>
+
+                <div class="d-flex justify-content-between text-muted small pt-2">
+                  <span id="fichaPublicado">Publicado recientemente</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Banner Adoptá con responsabilidad -->
+            <div class="card p-3 border-success bg-success bg-opacity-10">
+              <h6 class="fw-bold text-success text-uppercase mb-2"><i class="bi bi-shield-check me-1"></i> Adoptá con responsabilidad</h6>
+              <p class="text-muted small mb-0">Una mascota es un compromiso de años. Conversá con tu familia, conocé al animal antes de decidir y nunca lo entregues ni lo adoptes a cambio de dinero.</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Tarjetas -->
-      <div class="row g-4" id="contenedorTarjetasAdopcion">
-        <div class="col-md-4 tarjeta-adopcion" data-tamanio="Chico">
-          <div class="card h-100 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1543466835-00a7907e9de1?auto=format&fit=crop&w=600&q=80" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Rocky">
-            <div class="card-body">
-              <span class="badge bg-success mb-2">Perro · Chico</span>
-              <h5 class="card-title fw-bold text-light">Rocky</h5>
-              <p class="card-text text-muted small">Rescatado con libreta sanitaria. Súper sociable e ideal para espacios chicos.</p>
-            </div>
-            <div class="card-footer bg-transparent border-top border-secondary p-3">
-              <button class="btn btn-outline-info w-100 rounded-pill"><i class="bi bi-qr-code-scan me-1"></i> Ver Ficha Sanitaria (QR)</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 tarjeta-adopcion" data-tamanio="Mediano">
-          <div class="card h-100 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1587300003388-59208cc962cb?auto=format&fit=crop&w=600&q=80" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Luna">
-            <div class="card-body">
-              <span class="badge bg-info text-dark mb-2">Perro · Mediano</span>
-              <h5 class="card-title fw-bold text-light">Luna</h5>
-              <p class="card-text text-muted small">Cachorrona de 8 meses, castrada y desparasitada. Súper cariñosa.</p>
-            </div>
-            <div class="card-footer bg-transparent border-top border-secondary p-3">
-              <button class="btn btn-outline-info w-100 rounded-pill"><i class="bi bi-qr-code-scan me-1"></i> Ver Ficha Sanitaria (QR)</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4 tarjeta-adopcion" data-tamanio="Grande">
-          <div class="card h-100 overflow-hidden">
-            <img src="https://images.unsplash.com/photo-1552053831-71594a27632d?auto=format&fit=crop&w=600&q=80" class="card-img-top" style="height: 200px; object-fit: cover;" alt="Thor">
-            <div class="card-body">
-              <span class="badge bg-warning text-dark mb-2">Perro · Grande</span>
-              <h5 class="card-title fw-bold text-light">Thor</h5>
-              <p class="card-text text-muted small">Protector y juguetón. Requiere casa con patio amplio para ejercitarse.</p>
-            </div>
-            <div class="card-footer bg-transparent border-top border-secondary p-3">
-              <button class="btn btn-outline-info w-100 rounded-pill"><i class="bi bi-qr-code-scan me-1"></i> Ver Ficha Sanitaria (QR)</button>
-            </div>
-          </div>
-        </div>
-      </div>
     </section>
 
     <!-- 4. TRÁILERS DE ZOONOSIS Y CASTRACIÓN MUNICIPAL -->
-    <section id="zoonosis-section" class="mb-5">
+    <section id="zoonosis-section" class="mb-5 vista-seccion d-none">
       <div class="card border-0 shadow-lg rounded-4 p-4 border border-warning">
         <div class="d-flex align-items-center gap-3 mb-3">
           <i class="bi bi-truck text-warning fs-1"></i>
@@ -218,25 +386,77 @@
     </section>
 
     <!-- 5. FORO DE COMUNIDAD / CONSULTAS DE VETERINARIAS DE TURNO -->
-    <section id="foro-section" class="mb-5">
-      <div class="card p-4">
-        <h3 class="fw-bold text-primary mb-2"><i class="bi bi-chat-left-dots-fill me-2"></i>Foro Comunidad: Preguntas & Veterinarias de Turno</h3>
-        <p class="text-muted mb-3">¿Tenés dudas sobre alguna clínica de guardia o necesitás recomendación? Consultalo acá.</p>
-        
-        <div class="chat-mensajes p-3 mb-3" id="boxMensajes">
-          <div class="mb-2 p-2 rounded bg-dark border border-secondary">
-            <strong class="text-info">Carlos R.:</strong> <span class="text-light">¿Alguien sabe qué veterinaria de turno está abierta cerca del centro?</span>
+<!-- 5. FORO DE COMUNIDAD / CONSULTAS DE VETERINARIAS DE TURNO -->
+    <section id="foro-section" class="mb-5 vista-seccion d-none">
+      
+      <!-- VISTA A: LISTADO DE TEMAS DEL FORO -->
+      <div id="foro-lista-vista" class="card p-4">
+        <div class="d-flex justify-content-between align-items-center mb-3 flex-wrap gap-2">
+          <div>
+            <h3 class="fw-bold text-primary mb-1"><i class="bi bi-chat-left-dots-fill me-2"></i>Foro de Comunidad: Preguntas & Veterinarias de Turno</h3>
+            <p class="text-muted mb-0">¿Tenés dudas sobre alguna clínica de guardia o necesitás recomendación? Abrí un hilo de consulta.</p>
           </div>
-          <div class="mb-2 p-2 rounded bg-dark border border-secondary">
-            <strong class="text-success">Dra. Lucía (Vete):</strong> <span class="text-light">Hola Carlos, Clínica San Martín está de guardia 24hs hoy sobre Av. Alem.</span>
+          <button class="btn btn-primary rounded-pill px-4 fw-bold" data-bs-toggle="modal" data-bs-target="#modalNuevoHilo">
+            <i class="bi bi-plus-lg me-1"></i> Nueva Consulta
+          </button>
+        </div>
+
+        <!-- Encabezado estilo tabla de foro -->
+        <div class="d-none d-md-flex justify-content-between text-muted small fw-bold px-3 py-2 border-bottom border-secondary">
+          <span>Tema / Consulta</span>
+          <div class="d-flex gap-5 pe-2">
+            <span>Respuestas</span>
+            <span>Actividad</span>
           </div>
         </div>
 
-        <div class="input-group">
-          <input type="text" id="inputPregunta" class="form-control" placeholder="Escribí tu consulta o recomendación...">
-          <button class="btn btn-primary fw-bold" onclick="publicarMensajeComunidad()"><i class="bi bi-send me-1"></i> Publicar</button>
+        <!-- Contenedor dinámico de hilos -->
+        <div id="listaHilosForo" class="d-flex flex-column gap-2 mt-2"></div>
+      </div>
+
+      <!-- VISTA B: DENTRO DE UN HILO ESPECÍFICO -->
+      <div id="foro-detalle-vista" class="card p-4 d-none">
+        <div class="mb-3">
+          <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" onclick="volverAListaForo()">
+            <i class="bi bi-arrow-left me-1"></i> Volver a los temas
+          </button>
+        </div>
+
+        <!-- Post principal del tema -->
+        <div class="p-4 rounded-3 bg-dark border border-primary mb-4">
+          <div class="d-flex justify-content-between align-items-start flex-wrap gap-2 mb-2">
+            <h3 id="detalleHiloTitulo" class="fw-bold text-light mb-0"></h3>
+            <span id="detalleHiloFecha" class="badge bg-secondary"></span>
+          </div>
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="bi bi-person-circle text-info fs-5"></i>
+            <strong id="detalleHiloAutor" class="text-info small"></strong>
+          </div>
+          <p id="detalleHiloContenido" class="text-light mb-0"></p>
+        </div>
+
+        <!-- Respuestas dentro del hilo -->
+        <h6 class="fw-bold text-muted mb-3"><i class="bi bi-chat-square-text me-2"></i>Respuestas (<span id="detalleHiloContador">0</span>)</h6>
+        <div id="listaRespuestasHilo" class="d-flex flex-column gap-2 mb-4"></div>
+
+        <!-- Formulario para responder en este hilo -->
+        <div class="p-3 rounded-3 bg-dark border border-secondary">
+          <div class="row g-2">
+            <div class="col-md-3">
+              <input type="text" id="inputAutorRespuesta" class="form-control" placeholder="Tu nombre (Ej: Juan)">
+            </div>
+            <div class="col-md-7">
+              <input type="text" id="inputTextoRespuesta" class="form-control" placeholder="Escribí tu respuesta en este hilo...">
+            </div>
+            <div class="col-md-2">
+              <button class="btn btn-primary w-100 fw-bold" onclick="enviarRespuestaHilo()">
+                <i class="bi bi-send me-1"></i> Responder
+              </button>
+            </div>
+          </div>
         </div>
       </div>
+
     </section>
 
   </main>
@@ -347,6 +567,38 @@
     </div>
   </div>
 
+  <!-- MODAL 3: CREAR NUEVO HILO EN EL FORO -->
+  <div class="modal fade" id="modalNuevoHilo" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header bg-primary text-white border-0">
+          <h5 class="modal-title fw-bold"><i class="bi bi-chat-dots-fill me-2"></i> Crear Nueva Consulta en el Foro</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body p-4">
+          <form id="formNuevoHilo">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Tu Nombre o Rol</label>
+              <input type="text" class="form-control" id="nuevoHiloAutor" placeholder="Ej: Carlos R. / Dra. Ana (Vete)" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Título de la Consulta</label>
+              <input type="text" class="form-control" id="nuevoHiloTitulo" placeholder="Ej: ¿Veterinaria de guardia 24hs en zona centro?" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Detalle de tu pregunta</label>
+              <textarea class="form-control" id="nuevoHiloContenido" rows="3" placeholder="Explicá tu duda o situación..." required></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer border-0">
+          <button type="button" class="btn btn-dark rounded-pill" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-primary rounded-pill px-4" onclick="crearNuevoHilo()">Publicar Tema</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -712,17 +964,196 @@
     }
   }
 
-  // 6. Publicar mensaje en el foro
-  function publicarMensajeComunidad() {
-    const input = document.getElementById('inputPregunta');
-    if (!input.value.trim()) return;
+  // 6. Lógica del Foro por Hilos (Temas independientes)
+  let hilosForo = JSON.parse(localStorage.getItem('animalia_hilos_foro')) || [
+    {
+      id: 1,
+      titulo: "¿Alguien sabe qué veterinaria de turno está abierta cerca del centro?",
+      autor: "Carlos R.",
+      contenido: "Necesito llevar a mi perro por una urgencia leve hoy a la noche en San Miguel de Tucumán. ¿Alguna recomendación de guardia 24hs?",
+      fecha: "Hoy",
+      respuestas: [
+        { autor: "Dra. Lucía (Vete)", texto: "Hola Carlos, Clínica San Martín está de guardia 24hs hoy sobre Av. Alem.", fecha: "Hoy" }
+      ]
+    },
+    {
+      id: 2,
+      titulo: "Requisitos para castración gratuita en el tráiler de Zoonosis",
+      autor: "María G.",
+      contenido: "¿Cuántas horas de ayuno piden para gatos adultos y a qué hora conviene ir a sacar turno?",
+      fecha: "Ayer",
+      respuestas: []
+    }
+  ];
 
-    const box = document.getElementById('boxMensajes');
-    const nuevo = document.createElement('div');
-    nuevo.className = "mb-2 p-2 rounded bg-dark border border-secondary";
-    nuevo.innerHTML = `<strong class="text-warning">Vecino:</strong> <span class="text-light">${input.value}</span>`;
-    box.appendChild(nuevo);
-    input.value = '';
-    box.scrollTop = box.scrollHeight;
+  let hiloActivoId = null;
+
+  function guardarHilosStorage() {
+    localStorage.setItem('animalia_hilos_foro', JSON.stringify(hilosForo));
+  }
+
+  function renderizarListaHilos() {
+    const contenedor = document.getElementById('listaHilosForo');
+    if (!contenedor) return;
+
+    contenedor.innerHTML = hilosForo.map(hilo => `
+      <div class="p-3 rounded-3 bg-dark border border-secondary d-flex justify-content-between align-items-center flex-wrap gap-3"
+           style="cursor: pointer; transition: border-color 0.2s;"
+           onmouseover="this.style.borderColor='#0d6efd'"
+           onmouseout="this.style.borderColor='rgba(255,255,255,0.1)'"
+           onclick="abrirHilo(${hilo.id})">
+        <div class="d-flex align-items-start gap-3" style="max-width: 75%;">
+          <i class="bi bi-chat-square-quote-fill text-primary fs-3 mt-1"></i>
+          <div>
+            <h5 class="fw-bold text-light mb-1">${hilo.titulo}</h5>
+            <p class="text-muted small mb-1 text-truncate" style="max-width: 500px;">${hilo.contenido}</p>
+            <span class="badge bg-secondary bg-opacity-25 text-info">Por ${hilo.autor}</span>
+          </div>
+        </div>
+        <div class="d-flex align-items-center gap-5 ms-auto pe-2">
+          <div class="text-center">
+            <span class="fw-bold text-light d-block">${hilo.respuestas.length}</span>
+            <small class="text-muted">resp.</small>
+          </div>
+          <span class="text-muted small">${hilo.fecha}</span>
+        </div>
+      </div>
+    `).join('');
+  }
+
+  function crearNuevoHilo() {
+    const autor = document.getElementById('nuevoHiloAutor').value.trim() || 'Vecino';
+    const titulo = document.getElementById('nuevoHiloTitulo').value.trim();
+    const contenido = document.getElementById('nuevoHiloContenido').value.trim();
+
+    if (!titulo || !contenido) {
+      return alert('Por favor completá el título y el detalle de tu consulta.');
+    }
+
+    const nuevoHilo = {
+      id: Date.now(),
+      titulo,
+      autor,
+      contenido,
+      fecha: 'Recién',
+      respuestas: []
+    };
+
+    hilosForo.unshift(nuevoHilo);
+    guardarHilosStorage();
+    renderizarListaHilos();
+
+    const modalEl = document.getElementById('modalNuevoHilo');
+    bootstrap.Modal.getInstance(modalEl).hide();
+    document.getElementById('formNuevoHilo').reset();
+
+    // Abrir directamente el foro recién creado
+    abrirHilo(nuevoHilo.id);
+  }
+
+  function abrirHilo(id) {
+    const hilo = hilosForo.find(h => h.id === id);
+    if (!hilo) return;
+
+    hiloActivoId = id;
+    document.getElementById('foro-lista-vista').classList.add('d-none');
+    document.getElementById('foro-detalle-vista').classList.remove('d-none');
+
+    document.getElementById('detalleHiloTitulo').innerText = hilo.titulo;
+    document.getElementById('detalleHiloAutor').innerText = hilo.autor;
+    document.getElementById('detalleHiloFecha').innerText = hilo.fecha;
+    document.getElementById('detalleHiloContenido').innerText = hilo.contenido;
+
+    renderizarRespuestasHilo(hilo);
+  }
+
+  function renderizarRespuestasHilo(hilo) {
+    document.getElementById('detalleHiloContador').innerText = hilo.respuestas.length;
+    const lista = document.getElementById('listaRespuestasHilo');
+
+    if (hilo.respuestas.length === 0) {
+      lista.innerHTML = `<p class="text-muted small fst-italic">Todavía no hay respuestas en este tema. ¡Sé el primero en responder!</p>`;
+      return;
+    }
+
+    lista.innerHTML = hilo.respuestas.map(r => `
+      <div class="p-3 rounded-3 bg-dark border border-secondary">
+        <div class="d-flex justify-content-between mb-1">
+          <strong class="text-success small">${r.autor}</strong>
+          <small class="text-muted">${r.fecha}</small>
+        </div>
+        <p class="text-light mb-0 small">${r.texto}</p>
+      </div>
+    `).join('');
+  }
+
+  function enviarRespuestaHilo() {
+    if (!hiloActivoId) return;
+    const autorInput = document.getElementById('inputAutorRespuesta');
+    const textoInput = document.getElementById('inputTextoRespuesta');
+
+    const autor = autorInput.value.trim() || 'Vecino';
+    const texto = textoInput.value.trim();
+
+    if (!texto) return alert('Escribí una respuesta antes de enviar.');
+
+    const hilo = hilosForo.find(h => h.id === hiloActivoId);
+    if (hilo) {
+      hilo.respuestas.push({ autor, texto, fecha: 'Ahora' });
+      guardarHilosStorage();
+      renderizarRespuestasHilo(hilo);
+      renderizarListaHilos();
+      textoInput.value = '';
+    }
+  }
+
+  function volverAListaForo() {
+    hiloActivoId = null;
+    document.getElementById('foro-detalle-vista').classList.add('d-none');
+    document.getElementById('foro-lista-vista').classList.remove('d-none');
+    renderizarListaHilos();
+  }
+
+  // Cargar los hilos al iniciar la página
+  renderizarListaHilos();
+
+  // 7. Navegación entre vistas (pestañas como páginas independientes)
+  function mostrarVista(vistaId) {
+    const hero = document.getElementById('hero-banner');
+    const secciones = document.querySelectorAll('.vista-seccion');
+
+    secciones.forEach(sec => sec.classList.add('d-none'));
+
+    if (vistaId === 'inicio') {
+      hero.classList.remove('d-none');
+      document.getElementById('mapa-section').classList.remove('d-none');
+      recargarMapa();
+    } else {
+      hero.classList.add('d-none');
+      const seccionActiva = document.getElementById(vistaId);
+      if (seccionActiva) {
+        seccionActiva.classList.remove('d-none');
+      }
+      if (vistaId === 'mapa-section') {
+        recargarMapa();
+      }
+    }
+
+    document.querySelectorAll('.vista-link').forEach(link => {
+      if (link.dataset.vista === vistaId) {
+        link.classList.add('fw-bold', 'text-success');
+        link.classList.remove('text-light');
+      } else {
+        link.classList.remove('fw-bold', 'text-success');
+        link.classList.add('text-light');
+      }
+    });
+
+    const navbarCollapse = document.getElementById('navbarNav');
+    if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+      bootstrap.Collapse.getInstance(navbarCollapse).hide();
+    }
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
